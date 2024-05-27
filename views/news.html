@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức</title>
+    <style>
+        #root {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+        }
+
+        .item {
+            width: 250px;
+            margin: 0 0 20px 0;
+            overflow: hidden;
+        }
+
+        .item img {
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .item img:hover {
+            transition-duration: .7s;
+            cursor: pointer;
+            transform: scale(1.2)
+        }
+
+        .description p {
+            margin: 0 0 5px 0;
+        }
+
+        .description p:hover {
+            cursor: pointer;
+            color: skyblue;
+        }
+
+        .description img {
+            width: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+
+<script>
+
+    const renderHtml = document.querySelector('#root')
+    //fetch data from api and render to html
+    fetch(
+        "https://baomoi.com/_next/data/XFOpqU5zND_8GAiKi_Io6/category/khoa-hoc-cong-nghe.json?slug=khoa-hoc-cong-nghe"
+    )
+        .then((response) => response.json())
+        .then((data) => {
+            let news = data.pageProps.resp.data.content.sections;
+            let html = "";
+            news.map((item) => {
+                let datas = item.items
+                datas.map(item => {
+                    console.log(item);
+                    html += `
+                <div class='item'>
+                    <img src='${item.thumb}' title='${item.title}' />
+                    <div class='description'>
+                        <p>${item.title}</p> 
+                        <img src='${item.publisher.logo}' />   
+                    </div>
+                </div>
+            `;
+                })
+
+            });
+            renderHtml.innerHTML = html;
+        });
+</script>
+
+</html>
